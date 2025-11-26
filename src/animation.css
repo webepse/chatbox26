@@ -1,0 +1,25 @@
+/* message rentre */
+.fade-enter{
+    opacity: 0.01;
+    transform: scale(0.9) translateY(-50%);
+}
+
+/* à l'activation */
+.fade-enter-active{
+    opacity: 1;
+    transform: scale(1) translateY(0);
+    transition: all 200ms ease-out;
+}
+
+/* quand un élément part*/
+.fade-exit{
+    opacity: 1;
+    transform: scale(1) translateY(0);
+}
+
+/* quand il est parti */
+.fade-exit-active{
+    opacity: 0.01;
+    transform: scale(0.9) translateY(-50%);
+    transition: all 200ms ease-out;
+}
