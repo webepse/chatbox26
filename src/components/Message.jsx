@@ -1,7 +1,7 @@
-function Message(props) {
+function Message({pseudo, message}) {
     return (
         <p className="user-message">
-            Mon message
+            {message}
         </p>
     );
 }
