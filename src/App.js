@@ -28,6 +28,11 @@ function App() {
         {
             pseudo: 'bot',
             message: text
+        },
+        message-1651615 => 
+        {
+            pseudo: 'jordan',
+            message: 'test de message'    
         }
      ]
      */
@@ -35,7 +40,8 @@ function App() {
 
     const myMessages = Object.keys(messages).map(
         key => (
-            <Message 
+            <Message
+                key={key} 
                 pseudo={messages[key].pseudo}
                 message={messages[key].message}
             />
