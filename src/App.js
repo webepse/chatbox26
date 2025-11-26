@@ -1,19 +1,45 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import './App.css';
 import Message from './components/Message';
 import Formulaire from './components/Formulaire';
 import { useParams } from "react-router-dom";
+
+// gestion firebase
+import database from './base'
+import { getDatabase, ref, set, remove, onValue } from 'firebase/database';
+
+// gestion des animations
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
 
 function App() {
     let { login } = useParams();
     const [pseudo, setPseudo] = useState(login);
     const [messages, setMessages] = useState({})
 
+    useEffect(()=>{
+        console.log('test')
+
+        const dbMessagesRef = ref(database, 'messages')
+        // écouter l'event de changement de données
+        onValue(dbMessagesRef, (snapshot) => {
+            const data = snapshot.val()
+            if(data)
+            {
+                setMessages(data)
+            }
+        })
+    },[])
+
     const addMessage = message => {
         // copie du state Messages en vue d'ajouter le nouveau message
         const newMessages = {...messages}
         newMessages[`message-${Date.now()}`] = message
-        setMessages(newMessages)
+        Object.keys(newMessages).slice(0,-10).forEach(key => {
+            newMessages[key] = null
+        })
+        set(ref(database,'/'),{
+            messages: newMessages
+        })
     }
 
     /*

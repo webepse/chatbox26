@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 
 function Formulaire(props) {
     const [stateMessage, setStateMessage] = useState("");
-    const [length, setLength] = useState(props.length)
+    const [stateLength, setstateLength] = useState(props.length)
 
 
     const createMessage = () => {
@@ -17,7 +17,7 @@ function Formulaire(props) {
 
         // reset
         setStateMessage("")
-        setLength(length)
+        setstateLength(length)
     }
 
     const handleChange = event => {
@@ -25,12 +25,19 @@ function Formulaire(props) {
         const length = props.length - message.length
 
         setStateMessage(message)
-        setLength(length)
+        setstateLength(length)
     }
 
     const handleSubmit = event => {
         event.preventDefault()
         createMessage()
+    }
+
+    const handleKeyUp = (event)=> {
+        if(event.key === 'Enter')
+        {
+            createMessage()
+        }
     }
 
     return (
@@ -40,9 +47,10 @@ function Formulaire(props) {
                 onChange={handleChange}
                 required
                 maxLength={props.length}
+                onKeyUp={handleKeyUp}
             ></textarea>
             <div className="info">
-                {length}
+                {stateLength}
             </div>
             <button type="submit">
                 Envoyer
