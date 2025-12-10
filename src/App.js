@@ -4,9 +4,9 @@ import Message from './components/Message';
 import Formulaire from './components/Formulaire';
 import { useParams } from "react-router-dom";
 
-// gestion firebase
-import database from './base'
-import { getDatabase, ref, set, remove, onValue } from 'firebase/database';
+// gestion firebase - cloud firestore
+import firestore from "./base";
+import { doc, setDoc, onSnapshot } from 'firebase/firestore'
 
 // gestion des animations
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
@@ -22,52 +22,28 @@ function App() {
     const isUser = myPseudo => myPseudo === pseudo
 
     useEffect(()=>{
-        console.log('test')
-
-        const dbMessagesRef = ref(database, 'messages')
-        // écouter l'event de changement de données
-        onValue(dbMessagesRef, (snapshot) => {
-            const data = snapshot.val()
+      // dans firestore database -> création d'une collection messages et un document : UniqId
+        const dbMessagesRef = doc(firestore, 'messages', '9iFmuofBDrSWTfc4tYU9')
+        onSnapshot(dbMessagesRef, (snapshot) => {
+            const data = snapshot.data()
             if(data)
             {
-                setMessages(data)
+                // modifier pour ne récupérer que les 10 derniers messages
+                const lastTenMessages = data.messages.slice(-10)
+                setMessages(lastTenMessages || [])
             }
         })
     },[])
 
     const addMessage = message => {
         // copie du state Messages en vue d'ajouter le nouveau message
-        const newMessages = {...messages}
-        newMessages[`message-${Date.now()}`] = message
-        Object.keys(newMessages).slice(0,-10).forEach(key => {
-            newMessages[key] = null
-        })
-        set(ref(database,'/'),{
-            messages: newMessages
-        })
+        const newMessages = [...messages, {id:Date.now(), ...message}]
+        // limiter la taille du tableau à 10 messages
+        const limitedMessages = newMessages.slice(-10)
+        const messagesCollectionRef = doc(firestore,'messages', '9iFmuofBDrSWTfc4tYU9')
+        setDoc(messagesCollectionRef, {messages: limitedMessages})
+
     }
-
-    /*
-    state messages:
-    [
-        'message-1216154989' =>
-        {
-            pseudo: 'user',
-            message: text
-        },
-        message-1216154990 =>
-        {
-            pseudo: 'bot',
-            message: text
-        },
-        message-1651615 => 
-        {
-            pseudo: 'jordan',
-            message: 'test de message'    
-        }
-     ]
-     */
-
 
     const myMessages = Object.keys(messages).map(
         key => (

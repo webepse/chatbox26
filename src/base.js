@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getDatabase } from "firebase/database";
+import { getFirestore } from "firebase/firestore";
 
 // ne pas oublier d'adpater à votre firebase
 const firebaseConfig = {
@@ -9,10 +9,10 @@ const firebaseConfig = {
     projectId: "chatbox26-9aafc",
     storageBucket: "chatbox26-9aafc.firebasestorage.app",
     messagingSenderId: "328319591018",
-    appId: "1:328319591018:web:1b92a1b9a73bf15cfde013"
+    appId: "1:328319591018:web:d22794c6c7ff3756fde013"
 }
 
-const firebaseApp = initializeApp(firebaseConfig)
-const database = getDatabase(firebaseApp)
+const app = initializeApp(firebaseConfig)
+const firestore = getFirestore(app)
 
-export default database
+export default firestore

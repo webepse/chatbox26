@@ -17,3 +17,7 @@ réaliser les commandes d'installation:
 pour démarrer le projet:
 
 ```npm start```
+
+# Firebase - Firestore database 
+
+dans Firestore database création d'une collection: __messages__ et un document __document__ : génération d'un id unique à noter dans app.js + création d'un champ __messages__
